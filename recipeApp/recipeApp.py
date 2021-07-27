@@ -1,7 +1,6 @@
 
 from io import BytesIO
 from PIL import Image, ImageTk
-from playsound import playsound
 from py_edamam import PyEdamam
 import requests
 import tkinter as tk
@@ -40,7 +39,7 @@ class RecipeApp(object):
        
     def __run_search_query(self):
 
-        playsound(BUTTON_CLICK_SOUND)
+        
         query = self.search_entry.get()
         recipe = self.__get_recipe(query)
 
@@ -57,7 +56,7 @@ class RecipeApp(object):
         self.__get_ingredients(recipe)
 
         def __open_link():
-            playsound(BUTTON_CLICK_SOUND)
+           
             webbrowser.open(recipe_url)
 
         self.recipe_button = tk.Button(self.window, text = "recipe link", highlightbackground = "#ea86b6",
@@ -106,8 +105,8 @@ class RecipeApp(object):
 # Create App and run the app
 if __name__ == "__main__":
     #API Keys
-    APP_ID = "" #Put your app id for edamam api
-    APP_KEY = "" #Put your app key for edamam api
+    APP_ID = "43ca568b" #Put your app id for edamam api
+    APP_KEY = "aae59ee4b751d06ac8fd9a8dcd07769d" #Put your app key for edamam api
 
     recipe_app = RecipeApp(APP_ID, APP_KEY)
     recipe_app.run_app()
