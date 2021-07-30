@@ -1,14 +1,12 @@
-
+#Blah
 from io import BytesIO
 from PIL import Image, ImageTk
-from playsound import playsound
 from py_edamam import PyEdamam
 import requests
 import tkinter as tk
 import webbrowser
 
 
-BUTTON_CLICK_SOUND = "../clicks.m4a"
 WINDOW_TITLE = "Recipe App"
 RECIPE_IMAGE_WIDTH = 350
 RECIPE_IMAGE_HEIGHT = 300
@@ -16,8 +14,6 @@ RECIPE_IMAGE_HEIGHT = 300
 class RecipeApp(object):
 
     def __init__(self, recipe_app_id, recipe_app_key):
-
-        
         self.recipe_app_id = recipe_app_id
         self.recipe_app_key = recipe_app_key
         self.window = tk.Tk()
@@ -26,6 +22,7 @@ class RecipeApp(object):
         self.window.geometry("")
         self.window.configure(bg="#9ddfd3")
         self.window.title(WINDOW_TITLE)
+
 
         self.search_label = tk.Label(self.window, text = "Search Recipe", bg = "#ea86b6")
         self.search_label.grid(column = 0, row = 0, padx=5)
@@ -37,10 +34,11 @@ class RecipeApp(object):
             command = self.__run_search_query)
         self.search_button.grid(column = 2, row = 0, padx = 5)
 
-       
+    
+    
     def __run_search_query(self):
 
-        playsound(BUTTON_CLICK_SOUND)
+        
         query = self.search_entry.get()
         recipe = self.__get_recipe(query)
 
@@ -55,16 +53,17 @@ class RecipeApp(object):
 
         self.__show_image(recipe_image)
         self.__get_ingredients(recipe)
-
+        self.__get_url(recipe)
+        
+       
         def __open_link():
-            playsound(BUTTON_CLICK_SOUND)
             webbrowser.open(recipe_url)
 
         self.recipe_button = tk.Button(self.window, text = "recipe link", highlightbackground = "#ea86b6",
             command = __open_link)
         self.recipe_button.grid(column = 1, row = 7, pady = 10)
 
-
+            
     def __get_recipe(self, query):
         edamam_object = PyEdamam(recipes_appid=self.recipe_app_id, recipes_appkey=self.recipe_app_key)
         query_result = edamam_object.search_recipe(query)
@@ -83,7 +82,17 @@ class RecipeApp(object):
         holder = tk.Label(self.window, image = image)
         holder.photo = image
         holder.grid(column=1, row=6, pady=10)
-    
+
+   
+    def __get_url(self, recipe):
+
+        url = tk.Text(master = self.window, height = 5, width = 50, bg = "#ccaeae")
+        url.grid(column=1,row=10, pady = 10)
+        url.delete("1.0", tk.END)
+
+        url.insert(tk.END, "\n" + recipe.url + "\n")
+        #for url in recipe.url:
+           # url.insert(tk.END, "\n- " + ingredient)
 
     def __get_ingredients(self, recipe):
         ingredients = tk.Text(master = self.window, height = 15, width = 50, bg = "#ffdada")
@@ -91,7 +100,7 @@ class RecipeApp(object):
         ingredients.delete("1.0", tk.END)  
 
         if recipe == None :
-            ingredients.insert(tk.END, "No Recipe found for search criteria")
+            ingredients.insert(tk.END, "Sorry, no recipes")
             return
 
         ingredients.insert(tk.END, "\n" + recipe.label + "\n")
@@ -101,13 +110,14 @@ class RecipeApp(object):
     def run_app(self):
         self.window.mainloop()
         return
-      
+    
 
 # Create App and run the app
 if __name__ == "__main__":
     #API Keys
-    APP_ID = "" #Put your app id for edamam api
-    APP_KEY = "" #Put your app key for edamam api
+    APP_ID = "43ca568b" #Put your app id for edamam api
+    APP_KEY = "aae59ee4b751d06ac8fd9a8dcd07769d" #Put your app key for edamam api
+
 
     recipe_app = RecipeApp(APP_ID, APP_KEY)
     recipe_app.run_app()
